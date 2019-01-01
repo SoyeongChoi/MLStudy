@@ -29,12 +29,10 @@ X = [ones(m, 1) X];
 %       are in rows, then, you can use max(A, [], 2) to obtain the max 
 %       for each row.
 %       
-
-
-
-
-
-
+%   [all_theta] = ONEVSALL(X, y, num_labels, lambda) trains num_labels
+predict = sigmoid(X*all_theta');
+[value , maxindex] = max(predict,[],2);
+p = maxindex
 
 % =========================================================================
 
