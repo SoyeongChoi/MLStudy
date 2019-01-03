@@ -28,8 +28,6 @@ m = size(X, 1);
 % You need to return the following variables correctly 
 J = 0;
 Theta1_grad = zeros(size(Theta1));
-%Theta1 크기 : 25X401
-%Theta2 크기 : 10X26
 Theta2_grad = zeros(size(Theta2));
 
 % ====================== YOUR CODE HERE ======================
@@ -56,7 +54,10 @@ Theta2_grad = zeros(size(Theta2));
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
-
+Y = zeros(size(y), num_labels);
+for i = 1:m
+	Y(i,y(i)) = 1;
+end	
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
@@ -64,6 +65,8 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+
+
 
 X = [ones(m,1) X];
 for i = 1:m
@@ -73,8 +76,8 @@ for i = 1:m
   z3 = Theta2*[1;a2];
   a3 = sigmoid(z3);
   
-  J += -(1/m)*(y(i,:).*log(a3)+(1-y(i,:)).*log(1-a3));
-endfor
+  J += -(1/m)*(Y(i,:)*log(a3)+(1-Y(i,:))*log(1-a3));
+end
 
 J += (lambda/(2*m))*(sum(sum(Theta1(:,2:end).^2))+sum(sum(Theta2(:,2:end).^2)));
 
@@ -87,21 +90,18 @@ for i = 1:m
   z3 = Theta2*[1;a2];
   a3 = sigmoid(z3);
   
-  delta3 = a3-y(i,:)';
+  delta3 = a3-Y(i,:)';
   delta2 = (Theta2'*delta3).*[1;sigmoidGradient(z2)];
   delta2 = delta2(2:end);
   Theta1_grad = Theta1_grad+delta2*a1;
   Theta2_grad = Theta2_grad+delta3*[1;a2]';  
-endfor
+end
 
 
-Theta1_grad = Theta1_grad / m;
-Theta2_grad = Theta2_grad / m;
-
-
-
-
-
+Theta1_grad(:,1) = Theta1_grad(:,1)/m;
+Theta2_grad(:,1) = Theta2_grad(:,1)/m;
+Theta1_grad(:,2:end) = Theta1_grad(:,2:end)/m + ( (lambda/m) * Theta1(:,2:end) );
+Theta2_grad(:,2:end) = Theta2_grad(:,2:end)/m + ( (lambda/m) * Theta2(:,2:end) );
 
 
 
