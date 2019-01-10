@@ -17,14 +17,12 @@ S = zeros(n);
 %               and eigenvalues of the covariance matrix. 
 %
 % Note: When computing the covariance matrix, remember to divide by m (the
-%       number of examples).
+%       number of examples).s
 %
 
 
-
-
-
-
+Sigma = (1/m)*X'*X;
+[U,S,V] = svd(Sigma);
 
 % =========================================================================
 
