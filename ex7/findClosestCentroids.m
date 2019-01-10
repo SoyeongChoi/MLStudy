@@ -20,8 +20,13 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
-
+for i=1:length(X),
+	for j=1:K,
+		minJ(j) = norm(X(i,:)-centroids(j,:));
+	end
+	[val, index] = min(minJ);
+	idx(i) = index;
+end
 
 
 
